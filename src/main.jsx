@@ -1,15 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import {NextUIProvider} from "@nextui-org/react";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom'; // Import BrowserRouter
+import App from './App.jsx';
+import './index.css';
+import { NextUIProvider } from "@nextui-org/react";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-
   <React.StrictMode>
+    <BrowserRouter> 
       <NextUIProvider>
-      <App />
+        {/* <main className="dark text-foreground bg-background"> */}
+          <App />
+        {/* </main> */}
       </NextUIProvider>
-    
-  </React.StrictMode>,
-)
+    </BrowserRouter>
+  </React.StrictMode>
+);

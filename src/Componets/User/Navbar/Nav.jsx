@@ -25,7 +25,7 @@ export default function Nav() {
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       className="absolute"
-      colorScheme="dark"
+      // colorScheme="dark"
     >
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
@@ -33,42 +33,42 @@ export default function Nav() {
 
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
-          <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          {/* <AcmeLogo /> */}
+          {/* <p className="font-bold text-inherit">ACME</p> */}
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
-          <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          {/* <AcmeLogo /> */}
+          {/* <p className="font-bold text-inherit">ACME</p> */}
         </NavbarBrand>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          {/* <Link color="foreground" href="#">
             Features
-          </Link>
+          </Link> */}
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="#" aria-current="page">
+          {/* <Link href="#" aria-current="page">
             Customers
-          </Link>
+          </Link> */}
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          {/* <Link color="foreground" href="#">
             Integrations
-          </Link>
+          </Link> */}
         </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
+        {/* <NavbarItem className="hidden lg:flex">
           <Link href="#">Login</Link>
         </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="warning" href="#" variant="flat">
             Sign Up
           </Button>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarMenu>

@@ -1,14 +1,13 @@
 import React from "react";
 import {Avatar} from "@nextui-org/react";
-import Postes from "../Postes/Postes";
 import './Story.css';
 
 export default function Story() {
   return (
     
-    <div >
-      <div className="pl-[1px]">
-  <div className=" flex gap-6 items-center justify-center overflow-x-auto h-[90px]  md:h-[100px] md:gap-15 container md:overflow-x-auto ">
+    <div  className="w-full">
+      <div className="">
+  <div className=" flex gap-6  items-center pl-6 justify-between  overflow-x-auto h-[90px] w- md:h-[100px] md:gap-4 container md:overflow-x-auto pr-2">
   
   <Avatar className="mt-1 flex-none w-[65px] h-[65px] md:w-[80px] md:h-[80px]"isBordered color="default" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
   <Avatar className="mt-1 flex-none w-[65px] h-[65px] md:w-[80px] md:h-[80px]"isBordered color="secondary" src="https://i.pravatar.cc/150?u=a042581f4e29026704d"/>
@@ -32,7 +31,6 @@ export default function Story() {
   <Avatar className="mt-1 flex-none w-[65px] h-[65px] md:w-[80px] md:h-[80px]" isBordered color="danger" src="https://i.pravatar.cc/150?u=a04258114e29026708c" />
   </div>
 
-  <Postes/>
    </div>
  </div>
 

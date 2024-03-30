@@ -12,25 +12,25 @@ export default function Postes() {
       description: "Product Designer",
       avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026702d",
     },
-    // {
-    //   name: "John Smith",
-    //   description: "Software Engineer",
-    //   avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026703d",
-    // },
-    // {
-    //   name: "Alice Johnson",
-    //   description: "Frontend Developer",
-    //   avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026704d",
-    // },
+    {
+      name: "John Smith",
+      description: "Software Engineer",
+      avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026703d",
+    },
+    {
+      name: "Alice Johnson",
+      description: "Frontend Developer",
+      avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026704d",
+    },
     // Add more items as needed
   ];
 
   return (
-    <>
+    <div className="bg-green-400 h-full overflow-y-scroll">
       {data.map((item, index) => (
         <>
         
-        <div key={index} className=" ">
+        <div key={index} className="  ">
           <div className="h-[450px]">
             <div className="flex justify-between p-2 md:p-4 md:ml-6">
               <div>
@@ -62,6 +62,6 @@ export default function Postes() {
       </>
       ))}
       
-    </>
+    </div>
   );
 }

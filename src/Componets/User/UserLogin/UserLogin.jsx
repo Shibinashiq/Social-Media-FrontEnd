@@ -25,6 +25,8 @@ export default function UserLogin() {
   const [isVisible, setIsVisible] = React.useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,15 +34,20 @@ export default function UserLogin() {
       const response = await axios.post("http://127.0.0.1:8000/Auth/login/", {
         username,
         password,
+        
+      
       });
-      const { access, username: userData } = response.data;
+      const { access, username: userData , userId } = response.data;
 
-      dispatch(loginSuccess({ userId: userData, token: access }));
+     dispatch(loginSuccess({ username: userData, userId: userId, token: access }));
+
 
       console.log("Login successful. Username:", userData);
+      console.log("Login successful. UserId:", userId);
       console.log("Access token:", access);
 
-      toast.success("Login successful");
+      // toast.success("Login successful");
+      navigate('/');
     } catch (error) {
       console.error("Login error:", error);
 

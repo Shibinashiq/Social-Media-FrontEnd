@@ -3,23 +3,19 @@ import { Tabs, Tab, Input, Link, Button, Card, CardBody } from "@nextui-org/reac
 import axios from "axios";
 import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
-
-
-
-
+import { EyeFilledIcon } from "../UserSignup/EyeFilledIcon";
+import { EyeSlashFilledIcon } from "../UserSignup/EyeSlashFilledIcon";
 export default function Signup() {
   const [selected, setSelected] = useState("False");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate =useNavigate();
-
-
+  const navigate = useNavigate();
+  const [isVisible, setIsVisible] = React.useState(false);
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
     if (!username || !email || !password) {
-      
       toast.error("Please fill in all fields.");
       return;
     }
@@ -40,24 +36,21 @@ export default function Signup() {
       );
 
       if (response.status === 201) {
-        
         toast.success("User successfully registered.");
+       
         setUsername("");
         setEmail("");
         setPassword("");
+        navigate('/login');
       } else {
-       
         toast.error("Signup request failed: " + response.statusText);
       }
     } catch (error) {
-      
       if (error.response) {
-        
         const status = error.response.status;
         const data = error.response.data;
 
         if (status === 400) {
-          
           let errorMessage = "";
           if (data.username) {
             errorMessage = data.username[0];
@@ -71,18 +64,22 @@ export default function Signup() {
 
           toast.error(errorMessage);
         } else {
-        
           toast.error("An error occurred. Please try again later.");
         }
       } else {
-        
         toast.error("An error occurred. Please check your network connection and try again.");
       }
     }
   };
-const handleLoginLinkClick =()=>{
-  navigate('/login')
-}
+
+
+  const handleLoginLinkClick = () => {
+    navigate('/login');
+  };
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+  
+
 
   return (
     <div className="flex justify-evenly w-full h-screen items-center h-center">
@@ -102,6 +99,7 @@ const handleLoginLinkClick =()=>{
                   onSubmit={handleSignupSubmit}
                 >
                   <Input
+                  variant="bordered"
                     isRequired
                     label="Username"
                     placeholder="Enter your username"
@@ -110,6 +108,7 @@ const handleLoginLinkClick =()=>{
                     onChange={(e) => setUsername(e.target.value)}
                   />
                   <Input
+                  variant="bordered"
                     isRequired
                     label="Email"
                     placeholder="Enter your email"
@@ -118,14 +117,28 @@ const handleLoginLinkClick =()=>{
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <Input
-                    isRequired
-                    label="Password"
-                    placeholder="Enter your password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                 <p className="text-center text-small">
+                  label="Password"
+                  variant="bordered"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  endContent={
+                    <button
+                      className="focus:outline-none"
+                      type="button"
+                      onClick={toggleVisibility}
+                    >
+                      {isVisible ? (
+                        <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                      ) : (
+                        <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}
+                  className="max-w-xs"
+                />
+                  <p className="text-center text-small">
                     Already have an account?{" "}
                     <Link size="sm" onPress={handleLoginLinkClick}>
                       Login
@@ -135,10 +148,10 @@ const handleLoginLinkClick =()=>{
                     <Button type="submit" fullWidth color="primary">
                       Sign up
                     </Button>
+                
                   </div>
                 </form>
               </Tab>
-             
             </Tabs>
           </CardBody>
         </Card>

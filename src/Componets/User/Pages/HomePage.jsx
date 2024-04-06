@@ -6,7 +6,7 @@ function HomePage() {
   return (
     <div className='w-full   flex  justify-between overflow-hidden h-screen'>
         
-        <div className='w-full md:w-[50%]'>
+        <div className='w-full '>
 
         <Story/>
         <Postes/>

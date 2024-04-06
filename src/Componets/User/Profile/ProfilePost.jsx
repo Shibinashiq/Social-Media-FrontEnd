@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-import { Grid2X2, SquarePlay } from "lucide-react";
+
 export default function ProfilePost() {
   const list = [
     {
@@ -71,12 +71,7 @@ export default function ProfilePost() {
 
   return (
     <>
-      <hr className="border-t  border-b-slate-500" />
-      <div className=" flex justify-center gap-28 mt-3 mb-3">
-        <SquarePlay />
-        <Grid2X2 />
-      </div>
-      <hr className="border-t  border-b-slate-500" />
+      
 
       <div
         className=" gap-2  grid grid-cols-3 sm:grid-cols-4 overflow-y-auto"
@@ -105,6 +100,7 @@ export default function ProfilePost() {
           </Card>
         ))}
       </div>
+
     </>
   );
 }

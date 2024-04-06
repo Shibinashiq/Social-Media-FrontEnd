@@ -26,7 +26,7 @@ export default function Postes() {
   ];
 
   return (
-    <div className="bg-green-400 h-full overflow-y-scroll">
+    <div className="bg-green-400 h-full overflow-y-scroll flex flex-col items-center	">
       {data.map((item, index) => (
         <>
         

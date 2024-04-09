@@ -5,8 +5,12 @@ import { SquarePlay } from "lucide-react";
 import { Grid2X2 } from "lucide-react";
 import ProfileReel from "../Profile/ProfileReel";
 import PostReel from "../Profile/PostReel";
+import { useSelector } from "react-redux";
 
 function Uprofilepage() {
+
+
+  const userId = useSelector(state => state.userId);
   const [reel, setReel] = useState(false);
   const handleReel = (data) => {
     if (data === false) {
@@ -30,12 +34,11 @@ function Uprofilepage() {
           className=" cursor-pointer "  
           onClick={() => handleReel(true)}
         />
-        
         <hr className="border-t  border-b-slate-500" />
       </div>
 
       <div className="mt-2">
-        {reel === false ? <ProfilePost /> : <ProfileReel />}
+        {reel === false ? <ProfilePost   userId={userId} /> : <ProfileReel />}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ function UserOutlet() {
   const location = useLocation();
 
  
-  const shouldRenderNav = location.pathname === '/auth';
+  const shouldRenderNav = location.pathname === '/Signup';
 
   return (
     <div className=''>

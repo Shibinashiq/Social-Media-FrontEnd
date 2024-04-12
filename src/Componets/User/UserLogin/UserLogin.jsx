@@ -37,14 +37,15 @@ export default function UserLogin() {
         
       
       });
-      const { access, username: userData , userId } = response.data;
+      const { access, refresh,username: userData , userId } = response.data;
 
-     dispatch(loginSuccess({ username: userData, userId: userId, token: access }));
+     dispatch(loginSuccess({ username: userData, userId: userId, token: access , refresh:refresh}));
 
 
       console.log("Login successful. Username:", userData);
       console.log("Login successful. UserId:", userId);
       console.log("Access token:", access);
+      console.log("refresh token:", refresh);
 
       // toast.success("Login successful");
       navigate('/');

@@ -17,6 +17,7 @@ const initialState = loadState() || {
   userId: null,
   username: null,
   token: null,
+  refresh:null,
   error: null,
 };
 
@@ -25,11 +26,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
-      const { userId, username, token } = action.payload; 
+      const { userId, username, token ,refresh } = action.payload; 
       state.isLoggedIn = true;
       state.userId = userId;
       state.token = token;
       state.username = username;
+      state.refresh=refresh;
      
       localStorage.setItem('authState', JSON.stringify(state));
   

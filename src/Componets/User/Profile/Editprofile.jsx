@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux"; // Importing useSelector hook
+import { useSelector } from "react-redux"; 
 import {
   Modal,
   ModalContent,
@@ -11,19 +11,18 @@ import {
 import { Input } from "@nextui-org/react";
 
 function Editprofile({ cancel }) {
-  const [newUsername, setNewUsername] = useState(""); // State to store new username
-  const [bio, setBio] = useState(""); // State to store bio
-  const [profilePhoto, setProfilePhoto] = useState(null); // State to store profile photo
-  const [loading, setLoading] = useState(true); // State to track loading state
-  const username = useSelector((state) => state.username || ""); // Fetch existing username from Redux state
-  const userId = useSelector((state) => state.userId || ""); // Fetch userId from Redux state
-  const token = useSelector((state) => state.token || ""); // Fetch userId from Redux state
-// console.log(token);
+  const [newUsername, setNewUsername] = useState("");
+  const [bio, setBio] = useState(""); 
+  const [profilePhoto, setProfilePhoto] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  const username = useSelector((state) => state.username || ""); 
+  const userId = useSelector((state) => state.userId || ""); 
+  const token = useSelector((state) => state.token || ""); 
   useEffect(() => {
-    // Set the initial username in the input field when the component mounts
+    
     setNewUsername(username);
-    setLoading(false); // Set loading to false
-  }, [username]); // Trigger useEffect when the username changes
+    setLoading(false); 
+  }, [username]); 
 
   const handleEditProfile = async () => {
     const formData = new FormData();
@@ -45,12 +44,12 @@ function Editprofile({ cancel }) {
         }
       );
       if (response.ok) {
-        // Handle success
+       
       } else {
-        // Handle error
+   
       }
     } catch (error) {
-      // Handle fetch error
+      
       console.error("Error:", error);
     }
   };

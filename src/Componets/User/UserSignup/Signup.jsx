@@ -8,7 +8,7 @@ import { EyeSlashFilledIcon } from "../UserSignup/EyeSlashFilledIcon";
 
 
 
-export default function Signup() {
+export default function   () {
   const [selected, setSelected] = useState("False");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

@@ -4,11 +4,9 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, 
 import { EditIcon } from "./EditIcon";
 import { EyeIcon } from "./EyeIcon";
 import DeleteIconSVG from "./DeleteIconSVG ";
-import { useSelector } from "react-redux";
 import useAxios from "../../../axios";
-import { linkWithCredential } from "firebase/auth";
-
-
+import { Toaster, toast } from "react-hot-toast";
+import { RotateCcw } from 'lucide-react';
 const columns = [
   { name: "ID", uid: "id" },
   { name: "NAME", uid: "username" },
@@ -17,20 +15,15 @@ const columns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-
 const statusColorMap = {
   active: "success",
-  paused: "danger",
-  vacation: "warning",
+ 
+  blocked: "blocked"
 };
 
-
 export default function UserListing() {
-
-  const axiosinstance=useAxios();
-
+  const axiosinstance = useAxios();
   const [users, setUsers] = useState([]);
- 
 
   useEffect(() => {
     async function fetchUsers() {
@@ -41,27 +34,40 @@ export default function UserListing() {
         console.error("Error fetching users:", error);
       }
     }
-
     fetchUsers();
   }, []);
-
-
-
-
-  const handleDelete = async (userId) => { 
-      try {
-          
-          const response = await axiosinstance.post(`/Admin/users/${userId}/block/`,{});
-          console.log('resposnse',response);
-          setUsers(users.map(user => {
-              if (user.id === userId) {
-                  return { ...user, blocked: true };
-              }
-              return user;
-          }));
-      } catch (error) {
-          console.error("Error deleting user:", error);
+  const handleDelete = async (userId) => {
+    try {
+      const response = await axiosinstance.post(`/Admin/users/${userId}/block/`, {});
+      setUsers(prevUsers => prevUsers.map(user => {
+        if (user.id === userId) {
+          return { ...user, blocked: true, status: "blocked" };
+        }
+        return user;
+      }));
+      if (response.data.blocked) {
+        toast.success(` ${response.data.username} is now blocked`);
+      } else {
+        toast.success(` ${response.data.username} is now unblocked`);
       }
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+  };
+  
+  const handleUnDelete = async (userId) => {
+    try {
+      const response = await axiosinstance.post(`/Admin/users/${userId}/unblock/`, {});
+      setUsers(prevUsers => prevUsers.map(user => {
+        if (user.id === userId) {
+          return { ...user, blocked: false, status: "Active" };
+        }
+        return user;
+      }));
+      toast.success(` ${response.data.username} is now unblocked`);
+    } catch (error) {
+      console.error("Error unblocking user:", error);
+    }
   };
   
   const renderCell = React.useCallback((user, columnKey) => {
@@ -78,32 +84,27 @@ export default function UserListing() {
             {user.username}
           </User>
         );
-      case "status":
-        const status = user.status || "active";
-        return (
-          <Chip className="capitalize" color={statusColorMap[status]} size="sm" variant="flat">
-            {status}
-          </Chip>
-        );
+        case "status":
+  const status = user.blocked ? "Blocked" : "Active";
+  const color = user.blocked ? "warning" : "success";
+  return (
+    <Chip className="capitalize" color={color} size="sm" variant="flat">
+      {status}
+    </Chip>
+  );
       case "actions":
         return (
           <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EyeIcon />
               </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => handleDelete(user.id)}>
-                <DeleteIconSVG />
+              <span className="text-lg text-danger cursor-pointer active:opacity-50"onClick={() => user.blocked ? handleUnDelete(user.id) : handleDelete(user.id)}>
+              {user.blocked ? <RotateCcw style={{ color: 'green' }}/> : <DeleteIconSVG />}
               </span>
-            </Tooltip>
-           
+            <Toaster position="top-right" reverseOrder={false} />
           </div>
         );
       default:

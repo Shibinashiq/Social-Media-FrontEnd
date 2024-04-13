@@ -44,11 +44,11 @@ axiosInstance.defaults.withCredentials=true
 
         // console.log("axios access token is :-", access_token);
         const user = jwtDecode(access_token)
-
+        // const expiryDuration = 15 * 60;
         const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
         if (!isExpired) return req
 
-        const response = await axios.post(`${BASE_URL}/api/token/refersh/`, {
+        const response = await axios.post(`http://127.0.0.1:8000/Auth/api/token/refresh/`, {
             refresh: refresh_token
         });
 

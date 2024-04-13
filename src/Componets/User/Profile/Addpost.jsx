@@ -8,34 +8,30 @@ import {
   Button,
 } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import { Toaster, toast } from "react-hot-toast";
+import useAxios from "../../../axios";
 
 function Addpost({ onClose }) {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
-  const userId = useSelector((state) => state.userId || "");
-  const token = useSelector((state) => state.token || "");
+  const axiosinstance = useAxios(); 
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
   };
+
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
+
   const handleSaveChanges = () => {
     const formData = new FormData();
     formData.append("image", image);
     formData.append("description", description);
-  
-    axios
-      .post("http://127.0.0.1:8000/Auth/create-post/", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      })
+
+    axiosinstance
+      .post("/Auth/create-post/", formData)
       .then((response) => {
         if (response.status === 201) {
           onClose();
@@ -50,10 +46,11 @@ function Addpost({ onClose }) {
       });
   };
 
+
   return (
     <Modal isOpen onClose={onClose}>
       <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">Edit Profile</ModalHeader>
+        <ModalHeader className=" flex flex-col gap-1">Edit Profile</ModalHeader>
 
         <ModalBody>
           <label htmlFor="profile-photo">Upload Profile Photo</label>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Avatar, Button } from "@nextui-org/react";
 import Editprofile from "./Editprofile";
+import useAxios from "../../../axios";
+import { Plus, UserPlus } from 'lucide-react';
 
 function ProfileComp1() {
   const [modal, setModal] = useState(false);
@@ -10,6 +12,30 @@ function ProfileComp1() {
   const handleCancel = () => {
     setModal(false);
   };
+  
+  const axiosinstance = useAxios();
+
+  async function logoutUser() {
+    try {
+      const response = await axiosinstance.post('/api/logout', {
+        // access_token: localStorage.getItem('access_token')
+      });
+  
+      if (response.status === 200) {
+        // Remove tokens from local storage
+        // localStorage.removeItem('access_token');
+        // localStorage.removeItem('refresh_token');
+        // Redirect or perform any other action upon successful logout
+        window.location.href = '/login';
+      } else {
+        console.error('Logout failed:', response.data.error);
+        // Handle failed logout
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Handle network errors or other exceptions
+    }
+  }
   return (
     <>
       <div className="flex flex-row justify-between mt-2 h-auto w-screen px-4 md:justify-center md:gap-8 ">
@@ -18,6 +44,7 @@ function ProfileComp1() {
             src="https://i.pravatar.cc/150?u=a04258114e29026708c"
             className="w-20 h-20 text-large mr-4"
           />
+           <Plus  className=""/>
         </div>
 
         <div className="mt-3 ">
@@ -55,6 +82,14 @@ function ProfileComp1() {
         >
           Edit Profile
         </Button>
+        {/* <Button
+          color="primary"
+          variant="faded"
+          className=" w-40 h-9  text-white"
+         onClick={logoutUser}
+        >
+          Log OUT
+        </Button> */}
         <Button
           color="primary"
           variant="faded"

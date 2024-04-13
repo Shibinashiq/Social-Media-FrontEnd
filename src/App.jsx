@@ -10,10 +10,12 @@ import AdminOutlet from './Componets/Admin/AdminOutlet';
 import UserListing from './Componets/Admin/Userlisting.jsx/Userlisting'; 
 import AdminLogin from './Componets/Admin/AdminLogin/AdminLogin'
 import NotFound from './Componets/ErrorPage/NotFound';
+import { useSelector } from 'react-redux';
 function App() {
 
-
-  const token = localStorage.getItem('token');
+  const token = useSelector((state) => state.token || ""); 
+  console.log(token);
+  // const token = localStorage.getItem('token');
   const isAuthenticated = !!token;
   return (
     <Routes>

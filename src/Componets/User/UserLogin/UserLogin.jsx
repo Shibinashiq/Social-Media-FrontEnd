@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import axios from "axios";
 import { loginSuccess } from "../../../Redux/Auth/authSlice";
-import { Toaster, toast } from "react-hot-toast";
+  import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { EyeFilledIcon } from "../UserSignup/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../UserSignup/EyeSlashFilledIcon";
@@ -47,7 +47,7 @@ export default function UserLogin() {
       console.log("Access token:", access);
       console.log("refresh token:", refresh);
 
-      // toast.success("Login successful");
+      
       navigate('/');
     } catch (error) {
       console.error("Login error:", error);

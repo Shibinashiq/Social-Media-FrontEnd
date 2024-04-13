@@ -20,7 +20,7 @@ function Uprofilepage() {
     }
   };
   return (
-    <div className="w-screen">
+    <div className="min-w-screen min-h-screen">
       
       <ProfileComp1 />
       <div className="flex flex-row justify-center gap-14 mt-2">

@@ -1,67 +1,97 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux"; // Import useSelector from react-redux
 import { User } from "@nextui-org/react";
-import { GanttChart } from "lucide-react";
 import { Heart, MessageCircle } from "lucide-react";
 import { Bookmark } from "react-feather";
+import useAxios from "../../../axios";
+import { EllipsisVertical } from 'lucide-react';
+import { Input } from "@nextui-org/react";
 
 export default function Postes() {
-  // Define an array of data for each instance
-  const data = [
-    {
-      name: "Jane Doe",
-      description: "Product Designer",
-      avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-    },
-    {
-      name: "John Smith",
-      description: "Software Engineer",
-      avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026703d",
-    },
-    {
-      name: "Alice Johnson",
-      description: "Frontend Developer",
-      avatarSrc: "https://i.pravatar.cc/150?u=a04258114e29026704d",
-    },
-    // Add more items as needed
-  ];
+  const [posts, setPosts] = useState([]);
+  const [selectedPostId, setSelectedPostId] = useState(null); // State to track the ID of the selected post
+  const axiosinstance = useAxios();
+  const [showInput, setShowInput] = useState(false);
+  const [commentContent, setCommentContent] = useState('');
+  
+  const userId = useSelector(state => state.userId);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axiosinstance.get("/Auth/posts/");
+      setPosts(response.data); 
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  const handleShowInput = (postId) => {
+    setShowInput(true);
+    setSelectedPostId(postId); // Set the selected post ID
+  };
+
+  const handleInputKeyDown = async (event, postId) => {
+    if (event.key === "Enter") {
+      try {
+        await axiosinstance.post("/User/add-comment/", {
+          post: postId,
+          user: userId, 
+          content: commentContent,
+        });
+        setShowInput(false); 
+        setCommentContent(''); 
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
+    }
+  };
+
+  const handleOpen = () => {
+    setModal(true);
+  };
 
   return (
-    <div className="bg-green-400 h-full overflow-y-scroll md:flex flex-col md:items-center 	">
-      {data.map((item, index) => (
-        <>
-        
-        <div key={index} className="  ">
-          <div className="h-[450px]">
-            <div className="flex justify-between p-2 md:p-4 md:ml-6">
-              <div>
-                <User
-                  name={item.name}
-                  description={item.description}
-                  avatarProps={{ src: item.avatarSrc }}
-                  className="mt-1 ml-1 md:ml-[20px] z-10"
-                />
-                <hr className="border-t  border-b-slate-500" />
-              </div>
-              
-              <div className="mt-1 md:ml-9">
-                <GanttChart />
-              </div>
+    <div className="h-full overflow-y-scroll md:items-center mb-40 md:mb-[170px] w-full" style={{ scrollbarWidth: 'none', '-ms-overflow-style': 'none', '-webkit-scrollbar': 'none' }} >
+      {posts.map((item) => (
+        <div key={item.id} className="mt-4">
+          <div className="flex justify-between ">
+            <div className="   ">
+              <User
+                name={item.username}
+                avatarProps={{
+                  src: item.user_photo ? `http://127.0.0.1:8000${item.user_photo}` : undefined,
+                }}
+                className="mt-1 md: z-10"
+              />
+            </div>
+            <div className="mt-1 md:ml-9">
+              <EllipsisVertical className="mt-1" onClick={handleOpen} />
             </div>
           </div>
-          {index !== data.length - 1 && (
-            <hr key={`hr-${index}`} className="border-t border-b-slate-500" />
-          )}
+          <img className="bg-white" src={`http://127.0.0.1:8000${item.image}`} alt="test"  />
+          <div className="flex gap-4 items-center p-2 ">
+            <Heart />
+            <MessageCircle onClick={() => handleShowInput(item.id)} /> {/* Pass the postId to handleShowInput */}
+            {showInput && selectedPostId === item.id && ( // Only show input for the selected post
+              <Input
+                type="text"
+                variant="underlined"
+                placeholder="Post your comment"
+                value={commentContent}
+                onChange={(event) => setCommentContent(event.target.value)}
+                onKeyDown={(event) => handleInputKeyDown(event, item.id)}
+              />
+            )}
+            <div className="ml-auto">
+              <Bookmark />
+            </div>
+          </div>
         </div>
-        <div className="flex gap-4 items-center p-2 ">
-        <Heart />
-        <MessageCircle />
-        <div className="ml-auto">
-          <Bookmark />
-        </div>
-      </div>
-      </>
       ))}
-      
     </div>
   );
 }

@@ -1,50 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button } from "@nextui-org/react";
 import Editprofile from "./Editprofile";
 import useAxios from "../../../axios";
-import { Plus, UserPlus } from 'lucide-react';
+import ProfileIcon from "./ProfileIcon";
 
 function ProfileComp1() {
   const [modal, setModal] = useState(false);
+  const [userBio, setUserBio] = useState("");
+  const [userImage, setUserImage] = useState("");
+  const [userName,setUsername]=useState("");
+  const axiosInstance =useAxios()
   const handleOpen = () => {
     setModal(true);
   };
   const handleCancel = () => {
     setModal(false);
   };
-  
-  const axiosinstance = useAxios();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get("/User/user-data/");
+        console.log("user data is ",response.data)
+        setUserBio(response.data.bio);
+        setUserImage(response.data.photo);
+        setUsername(response.data.username);
 
-  async function logoutUser() {
-    try {
-      const response = await axiosinstance.post('/api/logout', {
-        // access_token: localStorage.getItem('access_token')
-      });
-  
-      if (response.status === 200) {
-        // Remove tokens from local storage
-        // localStorage.removeItem('access_token');
-        // localStorage.removeItem('refresh_token');
-        // Redirect or perform any other action upon successful logout
-        window.location.href = '/login';
-      } else {
-        console.error('Logout failed:', response.data.error);
-        // Handle failed logout
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Handle network errors or other exceptions
-    }
-  }
+    };
+
+    fetchUserData();
+  }, []);
   return (
     <>
       <div className="flex flex-row justify-between mt-2 h-auto w-screen px-4 md:justify-center md:gap-8 ">
-        <div>
-          <Avatar
-            src="https://i.pravatar.cc/150?u=a04258114e29026708c"
-            className="w-20 h-20 text-large mr-4"
-          />
-           <Plus  className=""/>
+        <div className=" mt-3">
+        <ProfileIcon userImage={userImage} userName={userName}/>
         </div>
 
         <div className="mt-3 ">
@@ -67,9 +59,11 @@ function ProfileComp1() {
       </div>
 
       <div className="mt-3 md:flex md:justify-center">
-        <div>
+        <div className="mr-48">
+       
+          
           <p className="text-sm ml-2">
-            "Stop living your fear and start living your dream"
+            "{userBio}"
           </p>
         </div>
       </div>
@@ -82,14 +76,7 @@ function ProfileComp1() {
         >
           Edit Profile
         </Button>
-        {/* <Button
-          color="primary"
-          variant="faded"
-          className=" w-40 h-9  text-white"
-         onClick={logoutUser}
-        >
-          Log OUT
-        </Button> */}
+       
         <Button
           color="primary"
           variant="faded"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux"; 
+import { Toaster, toast } from "react-hot-toast";
 import {
   Modal,
   ModalContent,
@@ -9,6 +10,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
+import useAxios from "../../../axios";
 
 function Editprofile({ cancel }) {
   const [newUsername, setNewUsername] = useState("");
@@ -17,7 +19,7 @@ function Editprofile({ cancel }) {
   const [loading, setLoading] = useState(true); 
   const username = useSelector((state) => state.username || ""); 
   const userId = useSelector((state) => state.userId || ""); 
-  const token = useSelector((state) => state.token || ""); 
+  const axiosInstance= useAxios ()
   useEffect(() => {
     
     setNewUsername(username);
@@ -31,29 +33,26 @@ function Editprofile({ cancel }) {
     if (profilePhoto) {
       formData.append("profile_photo", profilePhoto);
     }
-
+  
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/Auth/update/${userId}/`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-      if (response.ok) {
-       
+      const response = await axiosInstance.put(`/Auth/update-profile/${userId}/`, formData);
+      if (response.status === 200) {
+        console.log("Profile updated successfully");
+        toast.success("Profile updated successfully");
+        cancel(); // Close the modal
+        // Handle success
+        console.log("Profile updated successfully");
       } else {
-   
+        toast.error( response.data);
+        console.error("Error:", response.data); // Log the error response
+        // Handle specific error cases if needed
       }
     } catch (error) {
-      
-      console.error("Error:", error);
+      console.error("Error:", error); // Log the error
+      toast.error( response.data);
     }
   };
-
+  
 
   return (
     <Modal isOpen onClose={cancel}>
@@ -94,6 +93,7 @@ function Editprofile({ cancel }) {
           </Button>
         </ModalFooter>
       </ModalContent>
+      <Toaster position="top-right" reverseOrder={false} />
     </Modal>
   );
 }

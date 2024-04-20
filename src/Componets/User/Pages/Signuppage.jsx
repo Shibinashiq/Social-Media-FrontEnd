@@ -4,7 +4,7 @@ import Signup from '../UserSignup/Signup';
 
 function Signuppage() {
   return (
-    <div>
+    <div className="min-h-screen">
         <Nav/>
         <Signup/>
       

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-import { useSelector } from "react-redux";
 import useAxios from "../../../axios";
 
 function ProfilePost({ userId }) {
@@ -25,23 +24,27 @@ function ProfilePost({ userId }) {
   return (
     <  >
       <div
-        className="gap-2 grid grid-cols-3 sm:grid-cols-4 overflow-y-auto "
+        className="gap-2 grid grid-cols-3 sm:grid-cols-4 overflow-y-auto md:grid-cols-5"
         style={{ maxHeight: "70vh" }}
       >
         {userPosts.map((post, index) => (
           <Card
+          className=" "
             shadow="sm"
             key={index}
             isPressable
             onPress={() => console.log("user post pressed")}
           >
-            <CardBody className="">
+            <CardBody className="md:h-80">
             <Image
+          
               shadow="sm"
               radius="lg"
+              height="100%"
               width="100%"
+              
               alt={post.description}
-              className="w-full object-cover h-[140px] "
+              className="w-full  object-cover h-[140px] md:h-full "
               src={post.image}
             />
            

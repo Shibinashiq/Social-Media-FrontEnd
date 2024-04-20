@@ -31,11 +31,12 @@ function Addpost({ onClose }) {
     formData.append("description", description);
 
     axiosinstance
-      .post("/Auth/create-post/", formData)
+      .post("/User/create-post/", formData)
       .then((response) => {
         if (response.status === 201) {
           onClose();
           toast.success("Post added successfully");
+          window.location.reload();
         } else {
           throw new Error("Failed to save");
         }
@@ -50,7 +51,7 @@ function Addpost({ onClose }) {
   return (
     <Modal isOpen onClose={onClose}>
       <ModalContent>
-        <ModalHeader className=" flex flex-col gap-1">Edit Profile</ModalHeader>
+        <ModalHeader className=" flex flex-col gap-1">Add Post</ModalHeader>
 
         <ModalBody>
           <label htmlFor="profile-photo">Upload Profile Photo</label>

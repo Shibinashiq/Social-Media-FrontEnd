@@ -4,7 +4,7 @@ import UserLogin from "../UserLogin/UserLogin";
 
 function Loginpage() {
   return (
-    <div >
+    <div className="min-h-screen">
       <Nav />
       
       <UserLogin />

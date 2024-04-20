@@ -1,6 +1,7 @@
 import axios from "axios";
 import dayjs from 'dayjs'
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router-dom";
 
 
 const BASE_URL = "http://127.0.0.1:8000";
@@ -8,16 +9,16 @@ const BASE_URL = "http://127.0.0.1:8000";
 
 const useAxios = () => {
     const authState = JSON.parse(localStorage.getItem('authState'));
+    const navigate = useNavigate();
+    if (!authState || !authState.token || !authState.refresh) {
+        navigate('/Login');
+    }
 
     const { token, refresh } = authState;
 
-    // console.log("Access token:", token);
 
-    // console.log("Refresh token:", refresh);
 
     const access_token = token
-    //    console.log("hloo",access_token);
-    // const access_token = localStorage.getItem("token")
     const axiosInstance = axios.create({
         baseURL: BASE_URL,
         headers: { Authorization: `Bearer ${access_token}` }
@@ -42,9 +43,8 @@ axiosInstance.defaults.withCredentials=true
         }
 
 
-        // console.log("axios access token is :-", access_token);
         const user = jwtDecode(access_token)
-        // const expiryDuration = 15 * 60;
+
         const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
         if (!isExpired) return req
 

@@ -14,7 +14,7 @@ import ProfileIcon from './Componets/User/Profile/ProfileIcon';
 import { Footer } from './Componets/User/Footer/Footer';
 import ChatFirst from './Componets/User/ChatArea/ChatFirst';
 import ILchat from './Componets/User/ChatArea/Chat/ILchat';
-// import Comments from './Componets/User/Profile/Comments';
+import Comments from './Componets/User/Profile/Comments';
 import MoreHomeIcon from './Componets/User/Profile/MoreHomeIcon';
 function App() {
 
@@ -34,7 +34,7 @@ function App() {
         <Route path='/ChatFirst' element={<ChatFirst/>} />
         <Route path='/Footer' element={<Footer/>} />
         <Route path='/individualchat' element={<ILchat/>} />
-        {/* <Route path='/Comments' element={<Comments/>} /> */}
+        <Route path='/Comments' element={<Comments/>} />
         <Route path='/MoreHomeIcon' element={<MoreHomeIcon/>} />
 
 

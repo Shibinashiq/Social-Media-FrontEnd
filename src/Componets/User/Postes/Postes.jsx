@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux"; // Import useSelector from react-redux
+import { useSelector } from "react-redux";
 import { User } from "@nextui-org/react";
 import { Heart, MessageCircle } from "lucide-react";
 import { Bookmark } from "react-feather";
 import useAxios from "../../../axios";
 import { EllipsisVertical } from 'lucide-react';
 import { Input } from "@nextui-org/react";
+import Comments from "../Profile/Comments";
 
 export default function Postes() {
   const [posts, setPosts] = useState([]);
-  const [selectedPostId, setSelectedPostId] = useState(null); // State to track the ID of the selected post
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const axiosinstance = useAxios();
   const [showInput, setShowInput] = useState(false);
   const [commentContent, setCommentContent] = useState('');
-  
   const userId = useSelector(state => state.userId);
 
   useEffect(() => {
@@ -30,8 +30,15 @@ export default function Postes() {
   };
 
   const handleShowInput = (postId) => {
-    setShowInput(true);
-    setSelectedPostId(postId); // Set the selected post ID
+    // Toggle the input field only if it's already not shown for the selected post
+    if (!showInput || selectedPostId !== postId) {
+      setShowInput(true);
+      setSelectedPostId(postId);
+    } else {
+      // If already shown for the selected post, double-clicking will remove it
+      setShowInput(false);
+      setSelectedPostId(null);
+    }
   };
 
   const handleInputKeyDown = async (event, postId) => {
@@ -75,8 +82,8 @@ export default function Postes() {
           <img className="bg-white" src={`http://127.0.0.1:8000${item.image}`} alt="test"  />
           <div className="flex gap-4 items-center p-2 ">
             <Heart />
-            <MessageCircle onClick={() => handleShowInput(item.id)} /> {/* Pass the postId to handleShowInput */}
-            {showInput && selectedPostId === item.id && ( // Only show input for the selected post
+            <MessageCircle onClick={() => handleShowInput(item.id)} />
+            {showInput && selectedPostId === item.id && (
               <Input
                 type="text"
                 variant="underlined"
@@ -87,9 +94,10 @@ export default function Postes() {
               />
             )}
             <div className="ml-auto">
-              <Bookmark />
+              <Bookmark  />
             </div>
           </div>
+           <Comments postId={item.id} />
         </div>
       ))}
     </div>

@@ -31,7 +31,7 @@ function Addpost({ onClose }) {
     formData.append("description", description);
 
     axiosinstance
-      .post("/User/create-post/", formData)
+      .post("Auth/create-post/", formData)
       .then((response) => {
         if (response.status === 201) {
           onClose();

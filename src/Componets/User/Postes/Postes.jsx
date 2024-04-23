@@ -7,7 +7,10 @@ import useAxios from "../../../axios";
 import { EllipsisVertical } from 'lucide-react';
 import { Input } from "@nextui-org/react";
 import Comments from "../Profile/Comments";
-
+import { Toaster, toast } from 'react-hot-toast';
+import Like from "./Like";
+import MoreHomeIcon from "./MoreHomeIcon";
+import LikedUsers from "./LikedUsers";
 export default function Postes() {
   const [posts, setPosts] = useState([]);
   const [selectedPostId, setSelectedPostId] = useState(null);
@@ -15,6 +18,7 @@ export default function Postes() {
   const [showInput, setShowInput] = useState(false);
   const [commentContent, setCommentContent] = useState('');
   const userId = useSelector(state => state.userId);
+
 
   useEffect(() => {
     fetchPosts();
@@ -30,12 +34,12 @@ export default function Postes() {
   };
 
   const handleShowInput = (postId) => {
-    // Toggle the input field only if it's already not shown for the selected post
+   
     if (!showInput || selectedPostId !== postId) {
       setShowInput(true);
       setSelectedPostId(postId);
     } else {
-      // If already shown for the selected post, double-clicking will remove it
+   
       setShowInput(false);
       setSelectedPostId(null);
     }
@@ -51,18 +55,20 @@ export default function Postes() {
         });
         setShowInput(false); 
         setCommentContent(''); 
+
+        toast.success("Comment added successfully");
       } catch (error) {
         console.error("Error adding comment:", error);
+
+        toast.error("Failed to add comment");
       }
     }
   };
 
-  const handleOpen = () => {
-    setModal(true);
-  };
 
   return (
     <div className="h-full overflow-y-scroll md:items-center mb-40 md:mb-[170px] w-full" style={{ scrollbarWidth: 'none', '-ms-overflow-style': 'none', '-webkit-scrollbar': 'none' }} >
+      <Toaster position="top-right" reverseOrder={false} />
       {posts.map((item) => (
         <div key={item.id} className="mt-4">
           <div className="flex justify-between ">
@@ -76,13 +82,19 @@ export default function Postes() {
               />
             </div>
             <div className="mt-1 md:ml-9">
-              <EllipsisVertical className="mt-1" onClick={handleOpen} />
+              <MoreHomeIcon className="mt-2" />
             </div>
           </div>
           <img className="bg-white" src={`http://127.0.0.1:8000${item.image}`} alt="test"  />
           <div className="flex gap-4 items-center p-2 ">
-            <Heart />
-            <MessageCircle onClick={() => handleShowInput(item.id)} />
+            <div>
+     
+          <Like userId={userId} postId={item.id} />
+            </div>
+
+          
+
+            <MessageCircle  onClick={() => handleShowInput(item.id)} />
             {showInput && selectedPostId === item.id && (
               <Input
                 type="text"
@@ -97,7 +109,7 @@ export default function Postes() {
               <Bookmark  />
             </div>
           </div>
-           <Comments postId={item.id} />
+           <Comments          postId={item.id} />
         </div>
       ))}
     </div>

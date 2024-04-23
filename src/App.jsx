@@ -15,7 +15,8 @@ import { Footer } from './Componets/User/Footer/Footer';
 import ChatFirst from './Componets/User/ChatArea/ChatFirst';
 import ILchat from './Componets/User/ChatArea/Chat/ILchat';
 import Comments from './Componets/User/Profile/Comments';
-import MoreHomeIcon from './Componets/User/Profile/MoreHomeIcon';
+import MoreHomeIcon from './Componets/User/Postes/MoreHomeIcon';
+import Like from './Componets/User/Postes/Like';
 function App() {
 
   // const token = useSelector((state) => state.token || ""); 
@@ -36,6 +37,7 @@ function App() {
         <Route path='/individualchat' element={<ILchat/>} />
         <Route path='/Comments' element={<Comments/>} />
         <Route path='/MoreHomeIcon' element={<MoreHomeIcon/>} />
+        <Route path='/Like' element={<Like/>} />
 
 
         {/* <Route path='/Userprofile' element={isAuthenticated ? <Uprofilepage/> : <Navigate to="/Login" />} /> */}

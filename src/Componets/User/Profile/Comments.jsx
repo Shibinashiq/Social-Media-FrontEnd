@@ -1,49 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import useAxios from '../../../axios';
+import { Trash2 } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Comments = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [showAllComments, setShowAllComments] = useState(false);
-const axiosinstance=useAxios()
-  useEffect(() => {
-    // Function to fetch comments by post ID
-    const fetchComments = async () => {
-      try {
-        const response = await axiosinstance.get(`User/comments/${postId}/`);
-        console.log('Fetched comments:', response.data); // Log the fetched comments
+  const [noComments, setNoComments] = useState(false);
+  const axiosInstance = useAxios();
+
+  const handleShowAllComments = async () => {
+    try {
+      const response = await axiosInstance.get(`User/comments/${postId}/`);
+      if (response.data.length === 0) {
+        setNoComments(true);
+        setShowAllComments(true); 
+      } else {
         setComments(response.data);
-      } catch (error) {
-        console.error('Error fetching comments:', error);
+        setShowAllComments(true);
       }
-    };
-
-    // Fetch comments when component mounts
-    fetchComments();
-  }, [postId]);
-
-  const handleShowAllComments = () => {
-    setShowAllComments(true);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
   };
 
-  console.log('Comments:', comments); 
+  const handleHideComments = () => {
+    setShowAllComments(false);
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axiosInstance.delete(`User/delete-comment/${commentId}/`);
+      setComments(comments.filter(comment => comment.id !== commentId));
+      toast.success('Comment deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      toast.error('Error deleting comment. Please try again later.');
+    }
+  };
 
   return (
     <div>
-      <h2>Comments</h2>
-      {showAllComments ? (
-        <ul>
-          {comments.map(comment => (
-            <li key={comment.id}>
-              <p>{comment.content}</p>
-              {/* <p>By: {comment.user}</p> */}
-              {/* <p>Posted at: {comment.created_at}</p> */}
-            </li>
-          ))}
-        </ul>
+      {noComments ? (
+        <>
+          <p>No comments yet.</p>
+        </>
+      ) : showAllComments ? (
+        <>
+          <ul className='flex flex-col'>
+            {comments.map(comment => (
+              <li key={comment.id} className="flex items-center justify-between">
+                <div>
+                  <p className='text-base'>{comment.content}</p>
+                </div>
+                <div>
+                  <Trash2 className='w-4 ' onClick={() => handleDeleteComment(comment.id)} />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <button onClick={handleHideComments} className='text-tiny'>Hide comments</button>
+        </>
       ) : (
-        <button onClick={handleShowAllComments}>Show All Comments</button>
+        <button className='text-sm' onClick={handleShowAllComments}>Show All Comments</button>
       )}
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };

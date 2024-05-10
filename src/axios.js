@@ -1,55 +1,67 @@
 import axios from "axios";
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
 const useAxios = () => {
-    const authState = JSON.parse(localStorage.getItem('authState'));
-    const navigate = useNavigate();
-    if (!authState || !authState.token || !authState.refresh) {
-        navigate('/Login');
+  const navigate = useNavigate();
+
+  // Retrieve auth state or set an initial empty object
+  const authState = JSON.parse(localStorage.getItem('authState')) || {};
+
+  // Check if token and refresh token are present
+  if (!authState.token || !authState.refresh) {
+    navigate('/Login');
+    return axios.create({ baseURL: BASE_URL }); // Return a basic instance for non-authenticated requests
+  }
+
+  const { token, refresh } = authState;
+
+  let access_token = token;
+  const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+    headers: { Authorization: `Bearer ${access_token}` }
+  });
+
+  axiosInstance.defaults.withCredentials = true;
+
+  axiosInstance.interceptors.request.use(async req => {
+    const { token, refresh } = authState; 
+
+    access_token = token;
+    const refresh_token = refresh;
+
+    // Check token expiration (if available)
+    if (token) {
+      const user = jwtDecode(access_token);
+      const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
+
+      if (isExpired) {
+        try {
+          const response = await axios.post(`http://127.0.0.1:8000/Auth/api/token/refresh/`, {
+            refresh: refresh_token
+          });
+
+          localStorage.setItem("access_token", response.data.access);
+          localStorage.setItem("refresh_token", response.data.refresh);
+          req.headers.Authorization = `Bearer ${response.data.access}`;
+          access_token = response.data.access; // Update access token for subsequent requests
+          return req;
+        } catch (error) {
+          console.error('Refresh token failed:', error);
+          localStorage.removeItem('authState'); // Clear auth state on refresh failure
+          navigate('/Login'); // Redirect to login on refresh failure
+          return Promise.reject(error); // Reject the request to prevent further execution
+        }
+      }
     }
 
-    const { token, refresh } = authState;
+    return req;
+  });
 
-    let access_token = token;
-    const axiosInstance = axios.create({
-        baseURL: BASE_URL,
-        headers: { Authorization: `Bearer ${access_token}` }
-    });
-
-    axiosInstance.defaults.withCredentials = true;
-
-    axiosInstance.interceptors.request.use(async req => {
-        const authState = JSON.parse(localStorage.getItem('authState'));
-        const { token, refresh } = authState;
-
-        access_token = token;
-        const refresh_token = refresh;
-
-        if (!access_token) {
-            access_token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
-            req.headers.Authorization = `Bearer ${access_token}`;
-        }
-
-        const user = jwtDecode(access_token);
-        const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
-
-        if (!isExpired) return req;
-
-        const response = await axios.post(`http://127.0.0.1:8000/Auth/api/token/refresh/`, {
-            refresh: refresh_token
-        });
-
-        localStorage.setItem("access_token", response.data.access);
-        localStorage.setItem("refresh_token", response.data.refresh);
-        req.headers.Authorization = `Bearer ${response.data.access}`;
-        return req;
-    });
-
-    return axiosInstance;
+  return axiosInstance;
 };
 
 export default useAxios;

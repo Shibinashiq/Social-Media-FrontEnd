@@ -1,6 +1,7 @@
 import React from 'react'
 import Searchbar from './Search/Searchbar'
 import Chatuser from './Chat/Chatusers'
+import { UserPlus } from 'lucide-react'
 
 
 

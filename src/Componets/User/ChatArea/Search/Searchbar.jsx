@@ -7,7 +7,7 @@ import {SearchIcon} from "./SearchIcon ";
 
 function Searchbar() {
   return (
-      <div className="max-w-md ml-4 fixed z-10 bg-black ">
+      <div className="max-w-md ml-4  fixed z-10 bg-black ">
       <div className="mt-2  ">
          <Input
 

@@ -16,43 +16,57 @@ function Editprofile({ cancel }) {
   const [newUsername, setNewUsername] = useState("");
   const [bio, setBio] = useState(""); 
   const [profilePhoto, setProfilePhoto] = useState(null); 
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(false); 
+  const [profileData, setProfileData] = useState(null); 
+  const [showLoading, setShowLoading] = useState(false); 
   const username = useSelector((state) => state.username || ""); 
   const userId = useSelector((state) => state.userId || ""); 
-  const axiosInstance= useAxios ()
+  const axiosInstance = useAxios();
+
   useEffect(() => {
-    
     setNewUsername(username);
-    setLoading(false); 
+    setLoading(false);
+ 
   }, [username]); 
 
+  useEffect(() => {
+    if (profileData) {
+      setNewUsername(profileData.username);
+      setBio(profileData.bio);
+    }
+  }, [profileData]);
+
   const handleEditProfile = async () => {
+    setLoading(true); 
     const formData = new FormData();
     formData.append("username", newUsername);
     formData.append("bio", bio);
-    if (profilePhoto) {
-      formData.append("profile_photo", profilePhoto);
-    }
-  
+    formData.append("photo", profilePhoto);
+
     try {
       const response = await axiosInstance.put(`/Auth/update-profile/${userId}/`, formData);
       if (response.status === 200) {
         console.log("Profile updated successfully");
         toast.success("Profile updated successfully");
-        cancel(); // Close the modal
-        // Handle success
-        console.log("Profile updated successfully");
+        setProfileData(response.data);
+        cancel(); 
+        setShowLoading(true); 
+        window.location.reload();
       } else {
-        toast.error( response.data);
-        console.error("Error:", response.data); // Log the error response
-        // Handle specific error cases if needed
+        const errorMessage = getErrorMessage(response.status);
+        toast.error(errorMessage); 
+        console.error("Error:", errorMessage);
       }
     } catch (error) {
-      console.error("Error:", error); // Log the error
-      toast.error( response.data);
+      console.error("Error:", error); 
+      toast.error("Enter the correct data and try again .");
+    } finally {
+      setLoading(false); 
     }
   };
-  
+
+  const getErrorMessage = (statusCode) => {
+  };
 
   return (
     <Modal isOpen onClose={cancel}>
@@ -63,15 +77,14 @@ function Editprofile({ cancel }) {
           <Input
             type="text"
             variant="bordered"
-            label="Username"
-            value={newUsername}
+            label="Change Username"
             onChange={(e) => setNewUsername(e.target.value)}
           />
 
           <Input
             type="text"
             variant="bordered"
-            label="Bio"
+            label="Add Bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
           />
@@ -88,11 +101,16 @@ function Editprofile({ cancel }) {
           <Button color="danger" variant="light" onClick={cancel}>
             Close
           </Button>
-          <Button color="primary" onClick={handleEditProfile}>
-            Save Changes
+          <Button color="primary" onClick={handleEditProfile} disabled={loading}>
+            {loading ? "Saving..." : "Save Changes"}
           </Button>
         </ModalFooter>
       </ModalContent>
+      {showLoading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
       <Toaster position="top-right" reverseOrder={false} />
     </Modal>
   );

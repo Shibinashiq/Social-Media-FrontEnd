@@ -20,10 +20,9 @@ function ProfileComp1() {
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get("/User/user-data/");
-        console.log("user data is ",response.data)
         setUserBio(response.data.bio);
         setUserImage(response.data.photo);
-        setUsername(response.data.username);
+        setUsername(response.data.username)
 
       } catch (error) {
         console.error("Error fetching user data:", error);

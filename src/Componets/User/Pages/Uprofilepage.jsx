@@ -54,7 +54,7 @@ function Uprofilepage() {
 
       </div>
 
-      <div className=" ml-2">
+      <div className=" ml-12">
 
       <Footer/>
 

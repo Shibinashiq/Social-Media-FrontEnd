@@ -35,7 +35,7 @@ const Comments = ({ postId }) => {
       toast.success('Comment deleted successfully!');
     } catch (error) {
       console.error('Error deleting comment:', error);
-      toast.error('Error deleting comment. Please try again later.');
+      toast.error('You cant delete that comment .');
     }
   };
 
@@ -59,7 +59,9 @@ const Comments = ({ postId }) => {
               </li>
             ))}
           </ul>
-          <button onClick={handleHideComments} className='text-tiny'>Hide comments</button>
+          {comments.length > 0 && (
+            <button onClick={handleHideComments} className='text-tiny'>Hide comments</button>
+          )}
         </>
       ) : (
         <button className='text-sm' onClick={handleShowAllComments}>Show All Comments</button>

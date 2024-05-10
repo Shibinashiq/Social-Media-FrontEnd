@@ -14,9 +14,11 @@ import ProfileIcon from './Componets/User/Profile/ProfileIcon';
 import { Footer } from './Componets/User/Footer/Footer';
 import ChatFirst from './Componets/User/ChatArea/ChatFirst';
 import ILchat from './Componets/User/ChatArea/Chat/ILchat';
-import Comments from './Componets/User/Profile/Comments';
-import MoreHomeIcon from './Componets/User/Postes/MoreHomeIcon';
 import Like from './Componets/User/Postes/Like';
+import Suggestions from "./Componets/User/Suggestion/Suggestions";
+import SavedPage from './Componets/User/Pages/SavedPage';
+import UsersProfile from './Componets/User/UsersProfile/UsersProfile';
+import UsersPage from './Componets/User/Pages/UsersPage';
 function App() {
 
   // const token = useSelector((state) => state.token || ""); 
@@ -31,13 +33,14 @@ function App() {
         <Route path='/Signup' element={<Signuppage/>} />
         <Route path='/Login' element={<Loginpage/>} />
         <Route path='/Userprofile' element={<Uprofilepage/>} />
-        <Route path='/ProfileIcon' element={<ProfileIcon/>} />
+        <Route path='/SavedPage' element={<SavedPage/>} />
+
+  
+        <Route path='/suggestions' element={<Suggestions/>} />
+
         <Route path='/ChatFirst' element={<ChatFirst/>} />
-        <Route path='/Footer' element={<Footer/>} />
         <Route path='/individualchat' element={<ILchat/>} />
-        <Route path='/Comments' element={<Comments/>} />
-        <Route path='/MoreHomeIcon' element={<MoreHomeIcon/>} />
-        <Route path='/Like' element={<Like/>} />
+        <Route path='/UsersProfile/:id' element={<UsersPage/>} />
 
 
         {/* <Route path='/Userprofile' element={isAuthenticated ? <Uprofilepage/> : <Navigate to="/Login" />} /> */}

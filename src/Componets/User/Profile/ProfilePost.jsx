@@ -11,10 +11,9 @@ function ProfilePost({ userId }) {
       try {
         const response = await axiosinstance.get(`Auth/user-posts/${userId}/`);
         setUserPosts(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error fetching user posts:", error);
-        // Handle error here, e.g., show an error message to the user
       }
     };
 
@@ -36,7 +35,7 @@ function ProfilePost({ userId }) {
             onPress={() => console.log("user post pressed")}
           >
             <CardBody className="md:h-80">
-            <Image
+            <img
           
               shadow="sm"
               radius="lg"
@@ -44,7 +43,7 @@ function ProfilePost({ userId }) {
               width="100%"
               
               alt={post.description}
-              className="w-full  object-cover h-[140px] md:h-full "
+              className="object-cover h-full w-full rounded-lg"
               src={post.image}
             />
            
@@ -60,8 +59,8 @@ function ProfilePost({ userId }) {
         ))}
         
       </div>
-      {console.log("userPosts")}
-      {console.log(userPosts)}
+      {/* {console.log("userPosts")} */}
+      {/* {console.log(userPosts)} */}
       {/* <img src={response.data.image} alt="error" /> */}
       {/* {userPosts && <img  src={`http://127.0.0.1:8000/media/posts/829B18D1-747B-4674-BF6A-016815C43CEB.jpg`}alt="" />} */}
     </>
